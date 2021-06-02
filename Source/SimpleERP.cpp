@@ -34,6 +34,8 @@ int main(int argc, char** argv)
 	bool menu = true;
 	unsigned int choice = 0;
 
+	DbConnection* db = new DbConnection;
+
 	do
 	{
 		cout << "\t[ SimpleERP ERP System ]" << endl << endl;
@@ -93,6 +95,8 @@ int main(int argc, char** argv)
 		};
 	}
 	while (menu);
+
+	db->~DbConnection();
 	
 	return 0;
 };
