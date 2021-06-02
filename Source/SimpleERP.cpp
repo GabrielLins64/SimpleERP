@@ -32,6 +32,8 @@ void ClearScreen();
 
 int main(int argc, char** argv)
 {
+	mysql_library_init(argc, argv, NULL);
+
 	bool menu = true;
 	unsigned int choice;
 
@@ -113,6 +115,7 @@ int main(int argc, char** argv)
 
 	db->~DbConnection();
 	
+	mysql_library_end();
 	return 0;
 };
 
