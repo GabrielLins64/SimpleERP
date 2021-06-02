@@ -78,7 +78,6 @@ DbConnection::~DbConnection()
 {
 	if (this->connected)
 	{
-		mysql_shutdown(dbInstance, SHUTDOWN_DEFAULT);
 		mysql_close(dbInstance);
 
 		this->connected = false;
@@ -143,7 +142,12 @@ void DbConnection::query(const char* Statement, unsigned long Size)
 {
 	if (this->connected == true && dbInstance != NULL)
 	{
-		mysql_real_query(dbInstance, Statement, Size);
+		if (mysql_real_query(dbInstance, Statement, Size))
+		{
+			ls->write("[Error] An database error has occured: ");
+			ls->write(mysql_error(dbInstance));
+		}
+		dbResult = mysql_store_result(dbInstance);
 
 		ls->write("[Log] Database query performed successfully");
 	}
@@ -156,9 +160,43 @@ void DbConnection::query(const char* Statement, unsigned long Size)
 	};
 };
 
-char* DbConnection::getQueryData()
+const char* DbConnection::getQueryData()
 {
+	char buffer[4096];
 
+	if (this->connected == true && dbInstance != NULL)
+	{
+		memset(buffer, '\0', sizeof(buffer));
+
+		// Get number of fields (cells) from executed query
+		int fields = mysql_num_fields(dbResult);
+		ls->write("[Log] Number of fields obtained from query");
+
+		// Keep fetching result rows until the end
+		while (dbRow = mysql_fetch_row(dbResult))
+		{
+			// Print all columns
+			for (int i = 0; i < fields; i++)
+			{
+				strcat(buffer, (char*)dbRow[i]);
+				strcat(buffer, "\n");
+			};
+		};
+
+		return (const char*)buffer;
+	}
+	else
+	{
+		ls->write("[Error] An database error has occured: ");
+		ls->write(mysql_error(dbInstance));
+
+		return nullptr;
+	};
+
+	if (dbResult != NULL)
+		mysql_free_result(dbResult);
+
+	free(buffer);
 };
 
 bool DbConnection::isConnected()
