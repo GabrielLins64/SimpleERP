@@ -1,0 +1,26 @@
+{
+	"folders":
+	[
+		{
+			"path": ".."
+		}
+	],
+
+	"settings":
+	{
+		"C_Cpp.default.includePath": ["${workspaceFolder}/Dependencies/Header/"],
+		"C_Cpp.default.cppStandard": "c++17",
+		"C_Cpp.default.cStandard": "c17",
+		"C_Cpp.default.defines": ["SERP_BUILD"],
+		
+		"editor.detectIndentation": false,
+		"editor.insertSpaces": false,
+		"editor.fontSize": 14,
+		"editor.tabSize": 4,
+
+		"files.defaultLanguage": "cpp",
+		"files.enableTrash": false,
+		"files.encoding": "utf8",
+		"files.eol": "auto"
+	}
+}
