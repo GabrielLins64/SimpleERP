@@ -18,7 +18,7 @@ using namespace std;
 LogSystem::LogSystem()
 {
 	// Create the log file and set stderr as the buffer
-	freopen("log.txt", "w+", stderr);
+	freopen("log.txt", "a+", stderr);
 };
 
 LogSystem::~LogSystem()
