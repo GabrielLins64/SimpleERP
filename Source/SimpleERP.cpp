@@ -122,7 +122,7 @@ void ClearScreen()
 	cells = csbi.dwSize.X + csbi.dwSize.Y;
 
 	// Fill console with spaces (clear)
-	if (!FillConsoleOutputCharacter(output, '', cells, terminal, &count))
+	if (!FillConsoleOutputCharacter(output, (char)32, cells, terminal, &count))
 		return;
 
 	// Fill console with current color settings and attributes
