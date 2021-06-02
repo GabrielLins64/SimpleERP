@@ -8,12 +8,16 @@
 */
 #include "DbConnection.hpp"
 #include <iostream>
+#include <cstdio>
 
 using namespace SimpleERP;
 using namespace std;
 
 DbConnection::DbConnection()
 {
+	// Initialize log system
+	freopen("log.txt", "w", stderr);
+
 	// Initializes the database instance
 	dbInstance = mysql_init(dbInstance);
 	clog << "[Log] dbInstance initialized";
@@ -36,7 +40,7 @@ DbConnection::DbConnection()
 	if (dbInstance == NULL)
 	{
 		// Raise error message for any MySQL/MariaDB issue
-		cerr << "[Error] An database error has occured: " << mysql_error(dbInstance);
+		clog << "[Error] An database error has occured: " << mysql_error(dbInstance);
 	}
 	else
 	{
@@ -57,7 +61,7 @@ DbConnection::~DbConnection()
 	}
 	else
 	{
-		cerr << "[Error] An database error has occured: " << mysql_error(dbInstance);
+		clog << "[Error] An database error has occured: " << mysql_error(dbInstance);
 	};
 };
 
@@ -84,7 +88,7 @@ void DbConnection::reconnect()
 	}
 	else
 	{
-		cerr << "[Error] An database error has occured: " << mysql_error(dbInstance);
+		clog << "[Error] An database error has occured: " << mysql_error(dbInstance);
 		return;
 	};
 };
@@ -98,7 +102,7 @@ void DbConnection::query(const char* Statement, unsigned long Size)
 	}
 	else
 	{
-		cerr << "[Error] An database error has occured: " << mysql_error(dbInstance);
+		clog << "[Error] An database error has occured: " << mysql_error(dbInstance);
 		return;
 	};
 };
