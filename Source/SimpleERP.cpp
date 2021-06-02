@@ -18,6 +18,7 @@
 
 // Project headers
 #include "DbConnection.hpp"
+#include "LogSystem.hpp"
 #include "TCustomer.hpp"
 #include "TProduct.hpp"
 #include "TSales.hpp"
@@ -32,22 +33,29 @@ void ClearScreen();
 int main(int argc, char** argv)
 {
 	bool menu = true;
-	unsigned int choice = 0;
+	unsigned int choice;
 
 	DbConnection* db = new DbConnection();
+
+	// Clear screen if program is called directly
+	ClearScreen();
 
 	do
 	{
 		cout << "\t[ SimpleERP ERP System ]" << endl << endl;
 		
-		cout << "1. Customer" << endl;
-		cout << "2. Product" << endl;
-		cout << "3. Sales" << endl;
-		cout << "4. Users" << endl;
-		cout << "5. Settings" << endl;
+		cout << "\t1. Customer" << endl;
+		cout << "\t2. Product" << endl;
+		cout << "\t3. Sales" << endl;
+		cout << "\t4. Users" << endl;
+		cout << "\t5. Settings" << endl << endl;
 
-		cout << "Your option: " << endl << endl;
+		cout << "\tYour option: ";
 		cin >> choice;
+		cout << endl << endl;
+
+		// Screen is cleared for menu choice
+		ClearScreen();
 
 		switch (choice)
 		{
@@ -55,42 +63,49 @@ int main(int argc, char** argv)
 			{
 				cout << "To be implemented" << endl << endl;
 				ClearScreen();
+				break;
 			};
 
 			case 2:
 			{
 				cout << "To be implemented" << endl << endl;
 				ClearScreen();
+				break;
 			};
 
 			case 3:
 			{
 				cout << "To be implemented" << endl << endl;
 				ClearScreen();
+				break;
 			};
 
 			case 4:
 			{
 				cout << "To be implemented" << endl << endl;
 				ClearScreen();
+				break;
 			};
 
 			case 5:
 			{
 				cout << "To be implemented" << endl << endl;
 				ClearScreen();
+				break;
 			};
 
 			case 6:
 			{
 				cout << "To be implemented" << endl << endl;
 				ClearScreen();
+				break;
 			};
 
 			default:
 			{
 				cout << "You have to choose an valid option from the menu (1-6)" << endl << endl;
 				ClearScreen();
+				break;
 			};
 		};
 	}
