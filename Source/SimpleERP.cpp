@@ -63,8 +63,12 @@ int main(int argc, char** argv)
 		{
 			case 1:
 			{
-				cout << "To be implemented" << endl << endl;
-				ClearScreen();
+				cout << "Test query: " << endl << endl;
+				db->query("SHOW DATABASES;", 16);
+				cout << db->getQueryData() << endl;
+
+				system("pause");
+				menu = false;
 				break;
 			};
 
