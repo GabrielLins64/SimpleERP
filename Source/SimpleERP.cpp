@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	bool menu = true;
 	unsigned int choice = 0;
 
-	DbConnection* db = new DbConnection;
+	DbConnection* db = new DbConnection();
 
 	do
 	{
