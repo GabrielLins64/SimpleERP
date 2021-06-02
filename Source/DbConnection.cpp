@@ -10,7 +10,6 @@
 #include "LogSystem.hpp"
 #include <iostream>
 #include <cstdio>
-#include <chrono> // For time routines
 
 using namespace SimpleERP;
 using namespace std;
@@ -53,6 +52,8 @@ DbConnection::DbConnection()
 	}
 	else
 	{
+		ls->write("[Log] MySQL client version: ", mysql_get_client_info());
+		ls->write("[Log] MySQL server version: ", mysql_get_server_info(dbInstance));
 		ls->write("[Log] Database successfully connected");
 	};
 
@@ -153,4 +154,14 @@ void DbConnection::query(const char* Statement, unsigned long Size)
 		
 		return;
 	};
+};
+
+char* DbConnection::getQueryData()
+{
+
+};
+
+bool DbConnection::isConnected()
+{
+	return connected;
 };

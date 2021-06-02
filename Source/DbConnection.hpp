@@ -22,8 +22,17 @@ namespace SimpleERP
 			void reconnect();
 			void query(const char* Statement, unsigned long Size);
 
+			char* getQueryData();
+
+			bool isConnected();
+
+			MYSQL* getInstance();
+
 		protected:
 			MYSQL* dbInstance;
+			MYSQL_RES* dbResult;
+			MYSQL_DATA* dbData;
+
 			bool connected = false;
 	};
 };

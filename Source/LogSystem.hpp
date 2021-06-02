@@ -18,6 +18,7 @@ namespace SimpleERP
 			virtual ~LogSystem();
 
 			void write(const char* message);
+			void write(const char* message, const char* append);
 	};
 };
 

@@ -7,6 +7,7 @@
 	Author: Miguel Nischor <miguel@nischor.com.br>
 */
 #include "LogSystem.hpp"
+#include "DbConnection.hpp"
 #include <iostream>
 #include <cstdio>
 #include <time.h>
@@ -42,4 +43,22 @@ void LogSystem::write(const char* message)
 
 	// Write message to log output with formatted time
 	clog << buffer << "\t" << message << endl;
+};
+
+void LogSystem::write(const char* message, const char* append)
+{
+	// Get current time
+	time_t now = time(0);
+
+	// Organize time as a structure
+	tm tstruct = *localtime(&now);
+	
+	// Buffer to store time as text
+	char buffer[80];
+
+	// Write formatted time to buffer
+	strftime(buffer, sizeof(buffer), "[%d-%m-%Y %H:%M:%S]", &tstruct);
+
+	// Write message to log output with formatted time
+	clog << buffer << "\t" << message << append << endl;
 };
