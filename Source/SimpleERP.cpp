@@ -51,32 +51,38 @@ int main(int argc, char** argv)
 		{
 			case 1:
 			{
-
+				cout << "To be implemented" << endl << endl;
+				ClearScreen();
 			};
 
 			case 2:
 			{
-
+				cout << "To be implemented" << endl << endl;
+				ClearScreen();
 			};
 
 			case 3:
 			{
-
+				cout << "To be implemented" << endl << endl;
+				ClearScreen();
 			};
 
 			case 4:
 			{
-
+				cout << "To be implemented" << endl << endl;
+				ClearScreen();
 			};
 
 			case 5:
 			{
-
+				cout << "To be implemented" << endl << endl;
+				ClearScreen();
 			};
 
 			case 6:
 			{
-
+				cout << "To be implemented" << endl << endl;
+				ClearScreen();
 			};
 
 			default:
