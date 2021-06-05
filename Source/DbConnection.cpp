@@ -17,6 +17,23 @@ using namespace std;
 // Global instances
 LogSystem* ls;
 
+// Global variables
+static string db_error				= "[Error] An database error has occured: ";
+static string db_initialization		= "[Log] dbInstance initialized successfully";
+static string db_connected			= "[Log] Database successfully connected";
+static string db_disconnect 		= "[Log] Database disconnected successfully";
+static string db_reconnect 			= "[Log] Database successfully reconnected";
+static string db_mysql_client		= "[Log] MySQL client version: ";
+static string db_mysql_server		= "[Log] MySQL server version: ";
+static string db_mysql_charset		= "[Log] Database charset successfully changed to UTF-8";
+static string db_mysql_fields		= "[Log] Number of fields obtained from database";
+static string db_mysql_query		= "[Log] MySQL query performed successfully";
+
+/*
+	Function: DbConnection()
+	Description: Default constructor, initialize database connection
+	Return value: No return value
+*/
 DbConnection::DbConnection()
 {
 	// Global instances
@@ -27,12 +44,12 @@ DbConnection::DbConnection()
 
 	if (dbInstance == NULL)
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 	}
 	else
 	{
-		ls->write("[Log] dbInstance initialized successfully");
+		ls->write(db_initialization.c_str());
 	}
 
 	// Set current configuration for database connection
@@ -47,14 +64,14 @@ DbConnection::DbConnection()
 
 	if (dbInstance == NULL)
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 	}
 	else
 	{
-		ls->write("[Log] MySQL client version: ", mysql_get_client_info());
-		ls->write("[Log] MySQL server version: ", mysql_get_server_info(dbInstance));
-		ls->write("[Log] Database successfully connected");
+		ls->write(db_mysql_client.c_str(), mysql_get_client_info());
+		ls->write(db_mysql_server.c_str(), mysql_get_server_info(dbInstance));
+		ls->write(db_connected.c_str());
 	};
 
 	// Set current database character set for utf8
@@ -62,7 +79,7 @@ DbConnection::DbConnection()
 
 	if (dbInstance == NULL)
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 	}
 	else
@@ -70,10 +87,15 @@ DbConnection::DbConnection()
 		// Enable the connection flag
 		this->connected = true;
 
-		ls->write("[Log] Database charset successfully changed to UTF-8");
+		ls->write(db_mysql_charset.c_str());
 	};
 };
 
+/*
+	Function: ~DbConnection()
+	Description: Default destructor, terminate database connection
+	Return value: No return value
+*/
 DbConnection::~DbConnection()
 {
 	if (this->connected)
@@ -81,15 +103,20 @@ DbConnection::~DbConnection()
 		mysql_close(dbInstance);
 
 		this->connected = false;
-		ls->write("[Log] Database disconnected successfully");
+		ls->write(db_disconnect.c_str());
 	}
 	else
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 	};
 };
 
+/*
+	Function: reconnect()
+	Description: Atempt to reconnect to the database
+	Return value: No return value
+*/
 void DbConnection::reconnect()
 {
 	if (this->connected == false && dbInstance == NULL)
@@ -99,12 +126,12 @@ void DbConnection::reconnect()
 		
 		if (dbInstance == NULL)
 		{
-			ls->write("[Error] An database error has occured: ");
+			ls->write(db_error.c_str());
 			ls->write(mysql_error(dbInstance));
 		}
 		else
 		{
-			ls->write("[Log] dbInstance initialized successfully");
+			ls->write(db_initialization.c_str());
 		}
 
 		// Set current configuration for database connection
@@ -119,58 +146,69 @@ void DbConnection::reconnect()
 
 		if (dbInstance == NULL)
 		{
-			ls->write("[Error] An database error has occured: ");
+			ls->write(db_error.c_str());
 			ls->write(mysql_error(dbInstance));
 		}
 		else
 		{
-			ls->write("[Log] Database successfully reconnected");
+			ls->write(db_reconnect.c_str());
 		};
 
 		this->connected = true;
 	}
 	else
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 		
 		return;
 	};
 };
 
+/*
+	Function: query(const char*, const char*)
+	Description: Perform a SQL query to the database
+	Return value: No return value
+*/
 void DbConnection::query(const char* Statement, unsigned long Size)
 {
 	if (this->connected == true && dbInstance != NULL)
 	{
 		if (mysql_real_query(dbInstance, Statement, Size))
 		{
-			ls->write("[Error] An database error has occured: ");
+			ls->write(db_error.c_str());
 			ls->write(mysql_error(dbInstance));
 		}
 		dbResult = mysql_store_result(dbInstance);
 
-		ls->write("[Log] Database query performed successfully");
+		ls->write(db_mysql_query.c_str());
 	}
 	else
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 		
 		return;
 	};
 };
 
+/*
+	Function: getQueryData()
+	Description: Returns all data from previous database query
+	Return value: Previous data from database query
+*/
 const char* DbConnection::getQueryData()
 {
-	char buffer[4096];
+	string buffer(4096, 0);
+	static char* field_data = new char[4096];
 
 	if (this->connected == true && dbInstance != NULL)
 	{
-		memset(buffer, '\0', sizeof(buffer));
+		memset(field_data, '\0', 4096);
 
 		// Get number of fields (cells) from executed query
 		int fields = mysql_num_fields(dbResult);
-		ls->write("[Log] Number of fields obtained from query");
+		ls->write(db_mysql_fields.c_str());
 
 		// Keep fetching result rows until the end
 		while (dbRow = mysql_fetch_row(dbResult))
@@ -178,16 +216,18 @@ const char* DbConnection::getQueryData()
 			// Print all columns
 			for (int i = 0; i < fields; i++)
 			{
-				strcat(buffer, (char*)dbRow[i]);
-				strcat(buffer, "\n");
+				strcat(field_data, (char*)dbRow[i]);
+				strcat(field_data, (char*)"\n");
 			};
 		};
 
-		return (const char*)buffer;
+		buffer.assign(field_data);
+
+		return (const char*)buffer.c_str();
 	}
 	else
 	{
-		ls->write("[Error] An database error has occured: ");
+		ls->write(db_error.c_str());
 		ls->write(mysql_error(dbInstance));
 
 		return nullptr;
@@ -196,9 +236,14 @@ const char* DbConnection::getQueryData()
 	if (dbResult != NULL)
 		mysql_free_result(dbResult);
 
-	free(buffer);
+	free(field_data);
 };
 
+/*
+	Function: isConnected()
+	Description: Check is database is connected
+	Return value: true or false
+*/
 bool DbConnection::isConnected()
 {
 	return connected;
