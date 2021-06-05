@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# SimpleERP internal
+[Dd]ependencies/
+[Rr]esource/
+[Tt]emplate/
+
 # User-specific files
 *.rsuser
 *.suo
