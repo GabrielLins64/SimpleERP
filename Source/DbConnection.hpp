@@ -29,7 +29,7 @@ namespace SimpleERP
 			MYSQL* getInstance();
 
 		protected:
-			MYSQL* dbInstance;
+			MYSQL* dbInstance = nullptr;
 			MYSQL_RES* dbResult;
 			MYSQL_ROW dbRow;
 			MYSQL_DATA* dbData;

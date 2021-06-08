@@ -11,6 +11,9 @@
 #include <iostream>
 #include <cstdio>
 #include <time.h>
+#ifdef __linux__
+#include <cstring>
+#endif
 
 using namespace SimpleERP;
 using namespace std;

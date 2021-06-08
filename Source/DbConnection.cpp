@@ -10,6 +10,9 @@
 #include "LogSystem.hpp"
 #include <iostream>
 #include <cstdio>
+#ifdef __linux__
+#include <cstring>
+#endif
 
 using namespace SimpleERP;
 using namespace std;
